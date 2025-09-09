@@ -8,8 +8,11 @@ const useCategoryActions = () => {
   const updateCategory = async (id, categoryData) => {
     setLoading(true);
     try {
-      const response = await api.updateCategory(id, categoryData);
-
+      // const response = await api.updateCategory(id, categoryData);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = {
+        success: true,
+      };
       setLoading(false);
       handleSuccess(response.message, "Category updated successfully");
       return response.success;
@@ -23,7 +26,11 @@ const useCategoryActions = () => {
   const deleteCategory = async (id) => {
     setLoading(true);
     try {
-      const response = await api.deleteCategory(id);
+      // const response = await api.deleteCategory(id);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = {
+        success: true,
+      };
 
       setLoading(false);
       handleSuccess(response.message, "Category deleted successfully");

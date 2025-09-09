@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Edit,
   Trash2,
@@ -9,6 +9,10 @@ import {
   MessageSquare,
   Calendar,
   Filter,
+  User,
+  ShieldX,
+  ShieldCheck,
+  Ban,
 } from "lucide-react";
 import DataTable from "../components/common/DataTable";
 import Button from "../components/ui/Button";
@@ -19,9 +23,9 @@ import Select from "../components/ui/Select";
 import FilterBar from "../components/ui/FilterBar";
 import Card from "../components/ui/Card";
 import { useForm } from "react-hook-form";
-import { formatDate, formatDateTime } from "../utils/helpers";
-import { USER_ROLES, USER_STATUS } from "../config/constants";
+import { formatDate, formatDateTime, formatNumber } from "../utils/helpers";
 import useGetAllUsers from "../hooks/users/useGetAllUsers";
+import StatsCard from "../components/common/StatsCard";
 
 const UserManagement = () => {
   const { totalData, totalPages, users, loading, getAllUsers } =
@@ -47,6 +51,41 @@ const UserManagement = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const usersStats = useMemo(
+    () => [
+      {
+        title: "Total Users",
+        value: formatNumber(10290),
+        icon: User,
+        color: "text-primary-600",
+        bgColor: "bg-primary-600/20",
+      },
+      {
+        title: "Active Users",
+        value: formatNumber(10111),
+        icon: ShieldCheck,
+        color: "text-green-600",
+        bgColor: "bg-green-600/20",
+      },
+      {
+        title: "Inactive Users",
+        value: formatNumber(10290 - 10111 - 9),
+        icon: ShieldX,
+        color: "text-orange-600",
+        bgColor: "bg-orange-600/20",
+      },
+
+      {
+        title: "Blocked Users",
+        value: formatNumber(9),
+        icon: Ban,
+        color: "text-red-600",
+        bgColor: "bg-red-600/20",
+      },
+    ],
+    []
+  );
 
   const columns = [
     {
@@ -272,81 +311,18 @@ const UserManagement = () => {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Total Users
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {users.length}
-              </p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <UserPlus className="w-6 h-6 text-blue-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Active Users
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {
-                  users.filter((u) => u.status === "active" && !u.isBlocked)
-                    .length
-                }
-              </p>
-            </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <Shield className="w-6 h-6 text-green-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Blocked Users
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {users.filter((u) => u.isBlocked).length}
-              </p>
-            </div>
-            <div className="p-3 bg-red-100 rounded-lg">
-              <ShieldOff className="w-6 h-6 text-red-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                New This Month
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {
-                  users.filter((u) => {
-                    const userDate = new Date(u.createdAt);
-                    const now = new Date();
-                    return (
-                      userDate.getMonth() === now.getMonth() &&
-                      userDate.getFullYear() === now.getFullYear()
-                    );
-                  }).length
-                }
-              </p>
-            </div>
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <Calendar className="w-6 h-6 text-purple-600" />
-            </div>
-          </div>
-        </Card>
+        {usersStats?.map((stat, index) => (
+          <StatsCard
+            key={index}
+            title={stat.title}
+            value={stat.value}
+            icon={stat.icon ? <stat.icon /> : null}
+            colored
+            color={stat.color}
+            bgColor={stat.bgColor}
+            index={index}
+          />
+        ))}
       </div>
 
       {/* Filters */}

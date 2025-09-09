@@ -19,7 +19,6 @@ import TextArea from "../components/ui/TextArea";
 import Select from "../components/ui/Select";
 import { useForm } from "react-hook-form";
 import { formatDateTime } from "../utils/helpers";
-import { NOTIFICATION_TYPES } from "../config/constants";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([

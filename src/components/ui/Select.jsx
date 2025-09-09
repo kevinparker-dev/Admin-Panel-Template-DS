@@ -16,6 +16,7 @@ const Select = forwardRef(
       onSearch,
       value,
       onChange,
+      onBlur,
       disabled = false,
       name,
       loading = false,
@@ -27,10 +28,17 @@ const Select = forwardRef(
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredOptions, setFilteredOptions] = useState(options);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const [internalValue, setInternalValue] = useState(value || "");
 
     const containerRef = useRef(null);
     const searchInputRef = useRef(null);
     const dropdownRef = useRef(null);
+    const hiddenInputRef = useRef(null);
+
+    // Sync internal value with external value
+    useEffect(() => {
+      setInternalValue(value || "");
+    }, [value]);
 
     // Filter options based on search term
     useEffect(() => {
@@ -68,13 +76,18 @@ const Select = forwardRef(
           setIsOpen(false);
           setSearchTerm("");
           setHighlightedIndex(-1);
+
+          // Trigger onBlur when clicking outside
+          if (onBlur) {
+            onBlur({ target: { name, value: internalValue } });
+          }
         }
       };
 
       document.addEventListener("mousedown", handleClickOutside);
       return () =>
         document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    }, [onBlur, name, internalValue]);
 
     // Handle keyboard navigation
     useEffect(() => {
@@ -134,7 +147,7 @@ const Select = forwardRef(
       }
     }, [highlightedIndex]);
 
-    const selectedOption = options.find((opt) => opt.value === value);
+    const selectedOption = options.find((opt) => opt.value === internalValue);
 
     const handleToggle = () => {
       if (disabled) return;
@@ -144,13 +157,29 @@ const Select = forwardRef(
     };
 
     const handleSelect = (option) => {
-      // For react-hook-form compatibility, call onChange with the value
-      if (onChange) {
-        onChange(option.value);
-      }
+      const newValue = option.value;
+      setInternalValue(newValue);
       setIsOpen(false);
       setSearchTerm("");
       setHighlightedIndex(-1);
+
+      // Trigger both onChange and hidden input change for react-hook-form
+      if (onChange) {
+        onChange({ target: { name, value: newValue } });
+      }
+
+      // Update the hidden input value for react-hook-form
+      if (hiddenInputRef.current) {
+        hiddenInputRef.current.value = newValue;
+        // Dispatch change event for react-hook-form to detect the change
+        const event = new Event("change", { bubbles: true });
+        hiddenInputRef.current.dispatchEvent(event);
+      }
+
+      // Trigger onBlur after selection
+      if (onBlur) {
+        onBlur({ target: { name, value: newValue } });
+      }
     };
 
     const handleSearchChange = (e) => {
@@ -173,6 +202,25 @@ const Select = forwardRef(
           </label>
         )}
         <div className="relative">
+          {/* Hidden input for react-hook-form integration */}
+          <input
+            ref={(node) => {
+              hiddenInputRef.current = node;
+              if (ref) {
+                if (typeof ref === "function") {
+                  ref(node);
+                } else {
+                  ref.current = node;
+                }
+              }
+            }}
+            type="hidden"
+            name={name}
+            value={internalValue}
+            onChange={() => {}} // Controlled by handleSelect
+            {...props}
+          />
+
           {leftIcon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
               {leftIcon}
@@ -181,13 +229,10 @@ const Select = forwardRef(
 
           {/* Trigger Button */}
           <button
-            ref={ref}
             type="button"
             onClick={handleToggle}
             disabled={disabled}
-            name={name}
             className={`${baseClasses} ${errorClasses} ${disabledClasses} ${className} flex items-center justify-between text-left`}
-            {...props}
           >
             <span
               className={
@@ -255,14 +300,16 @@ const Select = forwardRef(
                         ? "bg-gray-100 dark:bg-gray-700"
                         : ""
                     } ${
-                      option.value === value
+                      option.value === internalValue
                         ? "text-primary-600 dark:text-primary-400"
                         : "text-gray-900 dark:text-white"
                     }`}
                     onClick={() => handleSelect(option)}
                   >
                     <span>{option.label}</span>
-                    {option.value === value && <Check className="w-4 h-4" />}
+                    {option.value === internalValue && (
+                      <Check className="w-4 h-4" />
+                    )}
                   </button>
                 ))
               )}

@@ -200,6 +200,7 @@ const Categories = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log("category: ", data);
     try {
       if (editingCategory) {
         const categoryId = editingCategory._id;
@@ -300,32 +301,16 @@ const Categories = () => {
                 error={errors.name?.message}
               />
 
-              <Controller
-                name="isActive"
-                control={control}
+              <Select
+                label="Status"
+                options={[
+                  { value: "", label: "Select Status" },
+                  { value: "true", label: "Active" },
+                  { value: "false", label: "Inactive" },
+                ]}
                 disabled={loadingCreateCategory}
-                defaultValue=""
-                rules={{ required: "Status is required" }}
-                render={({ field, fieldState }) => (
-                  <Select
-                    label="Status"
-                    options={[
-                      { value: "", label: "Select Status" },
-                      { value: "true", label: "Active" },
-                      { value: "false", label: "Inactive" },
-                    ]}
-                    value={field.value || ""}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      // Clear the error when a value is selected
-                      if (value) {
-                        clearErrors("isActive");
-                      }
-                    }}
-                    disabled={loadingCreateCategory}
-                    error={fieldState.error?.message}
-                  />
-                )}
+                {...register("isActive", { required: "Status is required" })}
+                error={errors.isActive?.message}
               />
             </div>
 

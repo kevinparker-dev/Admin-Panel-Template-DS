@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Eye,
   Download,
@@ -18,8 +18,8 @@ import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
 import FilterBar from "../components/ui/FilterBar";
 import Popup from "../components/ui/Popup";
-import { formatCurrency, formatDateTime } from "../utils/helpers";
-import { CHART_COLORS, TRANSACTION_STATUS } from "../config/constants";
+import { formatCurrency, formatDateTime, formatNumber } from "../utils/helpers";
+import { CHART_COLORS } from "../config/constants";
 import {
   LineChart,
   Line,
@@ -31,6 +31,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import StatsCard from "../components/common/StatsCard";
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([
@@ -122,6 +123,33 @@ const Transactions = () => {
     { date: "2024-01-06", revenue: 14300, transactions: 49 },
     { date: "2024-01-07", revenue: 19800, transactions: 71 },
   ]);
+
+  const transactionsStats = useMemo(
+    () => [
+      {
+        title: "Total Revenue",
+        value: formatCurrency(299.99),
+        icon: DollarSign,
+      },
+      {
+        title: "Pending Amount",
+        value: formatCurrency(149.99),
+        icon: Clock,
+      },
+      {
+        title: "Total Refunds",
+        value: formatCurrency(50),
+        icon: RefreshCw,
+      },
+
+      {
+        title: "Processing Fees",
+        value: formatCurrency(10.49),
+        icon: CreditCard,
+      },
+    ],
+    []
+  );
 
   const columns = [
     {
@@ -297,69 +325,18 @@ const Transactions = () => {
       <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold text-green-600">
-                  {formatCurrency(totalRevenue)}
-                </p>
-              </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <DollarSign className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Pending Amount
-                </p>
-                <p className="text-2xl font-bold text-yellow-600">
-                  {formatCurrency(pendingAmount)}
-                </p>
-              </div>
-              <div className="p-3 bg-yellow-100 rounded-lg">
-                <Clock className="w-6 h-6 text-yellow-600" />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Total Refunds
-                </p>
-                <p className="text-2xl font-bold text-red-600">
-                  {formatCurrency(totalRefunds)}
-                </p>
-              </div>
-              <div className="p-3 bg-red-100 rounded-lg">
-                <RefreshCw className="w-6 h-6 text-red-600" />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Processing Fees
-                </p>
-                <p className="text-2xl font-bold text-gray-600">
-                  {formatCurrency(totalFees)}
-                </p>
-              </div>
-              <div className="p-3 bg-gray-100 rounded-lg">
-                <CreditCard className="w-6 h-6 text-gray-600" />
-              </div>
-            </div>
-          </Card>
+          {transactionsStats?.map((stat, index) => (
+            <StatsCard
+              key={index}
+              title={stat.title}
+              value={stat.value}
+              icon={stat.icon ? <stat.icon /> : null}
+              colored
+              color={stat.color}
+              bgColor={stat.bgColor}
+              index={index}
+            />
+          ))}
         </div>
 
         {/* Revenue Charts */}

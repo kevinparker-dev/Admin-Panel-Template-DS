@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
   Send,
   Search,
@@ -8,18 +8,47 @@ import {
   Video,
   MoreVertical,
   Paperclip,
+  Timer,
 } from "lucide-react";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Card from "../components/ui/Card";
 import Badge from "../components/ui/Badge";
-import { formatDateTime } from "../utils/helpers";
+import { formatDateTime, formatNumber } from "../utils/helpers";
+import StatsCard from "../components/common/StatsCard";
 
 const ChatSupport = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [message, setMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const messagesEndRef = useRef(null);
+
+  const chatsStats = useMemo(
+    () => [
+      {
+        title: "Total Chats",
+        value: formatNumber(3),
+        icon: MessageSquare,
+      },
+      {
+        title: "Active Chats",
+        value: formatNumber(1),
+        icon: User,
+      },
+      {
+        title: "Unread Messages",
+        value: formatNumber(2),
+        icon: MessageSquare,
+      },
+
+      {
+        title: "Avg Response Time",
+        value: "2.5 min",
+        icon: Timer,
+      },
+    ],
+    []
+  );
 
   const [chats] = useState([
     {
@@ -224,67 +253,18 @@ const ChatSupport = () => {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Total Chats
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {totalChats}
-              </p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-blue-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Active Chats
-              </p>
-              <p className="text-2xl font-bold text-green-600">{activeChats}</p>
-            </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <User className="w-6 h-6 text-green-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Unread Messages
-              </p>
-              <p className="text-2xl font-bold text-red-600">
-                {unreadMessages}
-              </p>
-            </div>
-            <div className="p-3 bg-red-100 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-red-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Avg Response Time
-              </p>
-              <p className="text-2xl font-bold text-purple-600">
-                {avgResponseTime}
-              </p>
-            </div>
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-purple-600" />
-            </div>
-          </div>
-        </Card>
+        {chatsStats?.map((stat, index) => (
+          <StatsCard
+            key={index}
+            title={stat.title}
+            value={stat.value}
+            icon={stat.icon ? <stat.icon /> : null}
+            colored
+            color={stat.color}
+            bgColor={stat.bgColor}
+            index={index}
+          />
+        ))}
       </div>
 
       {/* Chat Interface */}
@@ -392,11 +372,6 @@ const ChatSupport = () => {
                       variant="ghost"
                       size="sm"
                       icon={<Phone className="w-4 h-4" />}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      icon={<Video className="w-4 h-4" />}
                     />
                     <Button
                       variant="ghost"

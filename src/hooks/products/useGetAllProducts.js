@@ -18,6 +18,7 @@ const useGetAllProducts = (search, status, page, limit) => {
 
     try {
       // const response = await api.getAllProducts(search, status, page, limit);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = {
         success: true,
         message: "Products retrieved successfully",

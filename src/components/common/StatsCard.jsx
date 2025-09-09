@@ -43,6 +43,8 @@ const StatsCard = ({
   changeType = "positive",
   icon,
   colored = false,
+  color,
+  bgColor,
   index = 0,
 }) => {
   const colorObj = COLOR_ORDER[index % COLOR_ORDER.length];
@@ -56,7 +58,11 @@ const StatsCard = ({
           </p>
           <p
             className={`text-2xl font-bold ${
-              colored ? colorObj.text : "text-gray-900 dark:text-white"
+              colored
+                ? color
+                  ? color
+                  : colorObj.text
+                : "text-gray-900 dark:text-white"
             } mt-1`}
           >
             {value}
@@ -89,9 +95,9 @@ const StatsCard = ({
           )}
         </div>
         {icon && (
-          <div className={`p-3 rounded-lg ${colorObj.bg}`}>
+          <div className={`p-3 rounded-lg ${bgColor ? bgColor : colorObj.bg}`}>
             {React.cloneElement(icon, {
-              className: `w-6 h-6 ${colorObj.text}`,
+              className: `w-6 h-6 ${color ? color : colorObj.text}`,
             })}
           </div>
         )}

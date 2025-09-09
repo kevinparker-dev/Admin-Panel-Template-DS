@@ -465,6 +465,73 @@ cd admin-panel-template`}
                 />
               </div>
             </Card>
+
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-text-primary mb-4">
+                API Configuration
+              </h3>
+              <p className="text-text-secondary mb-4">
+                Customize primary and secondary colors easily:
+              </p>
+              <div className="relative">
+                <pre className="bg-surface-secondary p-4 rounded-lg overflow-x-auto">
+                  <code className="text-sm text-text-primary">
+                    {`export const API_CONFIG = {
+  baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:8080", // set in .env or hardcore here
+  timeout: 100000, //your custom timeout for the API
+  headers: {
+    "Content-Type": "application/json",
+  }, // json headers
+  formDataHeaders: {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }, // form data headers
+  // Stripe Configuration (for revenue tracking)
+  stripe: {
+    publicKey: import.meta.env.VITE_STRIPE_PUBLIC_KEY || "",
+    webhookSecret: import.meta.env.VITE_STRIPE_WEBHOOK_SECRET || "",
+  },
+};
+                    `}
+                  </code>
+                </pre>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute top-2 right-2"
+                  onClick={() =>
+                    copyToClipboard(
+                      `export const API_CONFIG = {
+  baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:8080", // set in .env or hardcore here
+  timeout: 100000, //your custom timeout for the API
+  headers: {
+    "Content-Type": "application/json",
+  }, // json headers
+  formDataHeaders: {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }, // form data headers
+  // Stripe Configuration (for revenue tracking)
+  stripe: {
+    publicKey: import.meta.env.VITE_STRIPE_PUBLIC_KEY || "",
+    webhookSecret: import.meta.env.VITE_STRIPE_WEBHOOK_SECRET || "",
+  },
+};`,
+                      "color-config"
+                    )
+                  }
+                  icon={
+                    copiedCode === "color-config" ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )
+                  }
+                />
+              </div>
+            </Card>
           </div>
         </div>
       ),
@@ -1204,7 +1271,7 @@ VITE_APP_VERSION=1.0.0`,
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-black dark:text-white">
       <div className="flex">
         {/* Sidebar */}
         <div className="w-64 bg-surface border-r border-border h-screen sticky top-0 overflow-y-auto">
@@ -1240,7 +1307,7 @@ VITE_APP_VERSION=1.0.0`,
                         onClick={() => setActiveSection(item.id)}
                         className={`block w-full text-left px-3 py-2 text-sm rounded-lg transition-colors duration-200 ${
                           activeSection === item.id
-                            ? "bg-primary-100 text-primary-700"
+                            ? "bg-primary-100/30 text-primary-700"
                             : "text-text-secondary hover:text-text-primary hover:bg-surface-secondary"
                         }`}
                       >

@@ -17,6 +17,8 @@ const useGetAllCategories = (status, page, limit) => {
     setLoading(true);
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // const response = await api.getAllCategories(status, page, limit);
       const response = {
         success: true,

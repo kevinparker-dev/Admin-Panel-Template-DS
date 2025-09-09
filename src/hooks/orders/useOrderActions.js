@@ -29,6 +29,8 @@ const useOrderActions = (
   const getOrders = async () => {
     setLoading(true);
     try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // const response = await api.getOrders(
       //   paymentStatus,
       //   orderStatus,
@@ -243,7 +245,11 @@ const useOrderActions = (
   const updateOrder = async (id, orderData) => {
     setLoadingActions(true);
     try {
-      const response = await api.updateOrder(id, orderData);
+      // const response = await api.updateOrder(id, orderData);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = {
+        success: true,
+      };
       setLoadingActions(false);
       return response.success;
     } catch (error) {

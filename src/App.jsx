@@ -63,6 +63,20 @@ function App() {
 
                           <Route path="/dashboard" element={<Dashboard />} />
 
+                          <Route path="/users">
+                            <Route path="" element={<UserManagement />} />
+                            <Route
+                              path="blocked"
+                              element={
+                                <div className="p-6">
+                                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    Blocked Users - Coming Soon
+                                  </h1>
+                                </div>
+                              }
+                            />
+                          </Route>
+
                           <Route path="/products">
                             <Route path="" element={<Products />} />
                             <Route path="categories" element={<Categories />} />
@@ -70,13 +84,45 @@ function App() {
 
                           <Route path="/orders" element={<Orders />} />
 
+                          <Route path="/transactions">
+                            <Route path="" element={<Transactions />} />
+                            <Route
+                              path="revenue"
+                              element={
+                                <div className="p-6">
+                                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    Revenue Breakdown - Coming Soon
+                                  </h1>
+                                </div>
+                              }
+                            />
+                          </Route>
+
+                          <Route path="/support">
+                            <Route
+                              path="tickets"
+                              element={<SupportTickets />}
+                            />
+                            <Route path="chat" element={<ChatSupport />} />
+                            <Route path="email" element={<SendEmail />} />
+                          </Route>
+
+                          <Route
+                            path="/notifications"
+                            element={<Notifications />}
+                          />
+
+                          <Route path="/reports" element={<Reports />} />
+
+                          <Route path="/analytics" element={<Analytics />} />
+
                           <Route path="/settings">
                             <Route
                               path=""
                               element={
                                 <div className="p-6">
                                   <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                    Settings
+                                    Settings - Coming Soon
                                   </h1>
                                 </div>
                               }
@@ -84,6 +130,16 @@ function App() {
                             <Route
                               path="change-password"
                               element={<ChangePassword />}
+                            />
+                            <Route
+                              path="general"
+                              element={
+                                <div className="p-6">
+                                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    General Settings - Coming Soon
+                                  </h1>
+                                </div>
+                              }
                             />
                           </Route>
 

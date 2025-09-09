@@ -8,7 +8,12 @@ const useProductActions = () => {
   const updateProduct = async (id, productData) => {
     setLoading(true);
     try {
-      const response = await api.updateProduct(id, productData);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // const response = await api.updateProduct(id, productData);
+      const response = {
+        success: true,
+      };
       setLoading(false);
       handleSuccess(response.message, "Product updated successfully");
       return response.success;
@@ -22,7 +27,12 @@ const useProductActions = () => {
   const deleteProduct = async (id) => {
     setLoading(true);
     try {
-      const response = await api.deleteProduct(id);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // const response = await api.deleteProduct(id);
+      const response = {
+        success: true,
+      };
       setLoading(false);
       handleSuccess(response.message, "Product deleted successfully");
       return response.success;

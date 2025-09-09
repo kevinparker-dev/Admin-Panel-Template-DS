@@ -20,7 +20,7 @@ import Badge from "../components/ui/Badge";
 import Card from "../components/ui/Card";
 import Modal from "../components/ui/Modal";
 import { formatCurrency, formatDate, formatDateTime, formatNumber } from "../utils/helpers";
-import { ORDER_STATUS, PAGINATION_CONFIG } from "../config/constants";
+import { PAGINATION_CONFIG } from "../config/constants";
 import useOrderActions from "../hooks/orders/useOrderActions";
 import useDebounce from "../hooks/global/useDebounce";
 import FilterBar from "../components/ui/FilterBar";

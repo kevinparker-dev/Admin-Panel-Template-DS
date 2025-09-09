@@ -8,7 +8,6 @@ import Modal from '../components/ui/Modal'
 import Select from '../components/ui/Select'
 import TextArea from '../components/ui/TextArea'
 import { useForm } from 'react-hook-form'
-import { EMAIL_CONFIG, USER_ROLES } from '../config/constants'
 
 const SendEmail = () => {
   const [emailHistory, setEmailHistory] = useState([
@@ -196,7 +195,6 @@ const SendEmail = () => {
                 options={[
                   { value: '', label: 'Select Recipients' },
                   { value: 'all', label: 'All Users' },
-                  { value: 'role', label: 'By Role' },
                   { value: 'specific', label: 'Specific Emails' },
                 ]}
                 {...register('recipientType', { required: 'Recipient type is required' })}

@@ -8,7 +8,11 @@ const useCreateCategory = () => {
   const createCategory = async (categoryData) => {
     setLoading(true);
     try {
-      const response = await api.createCategory(categoryData);
+      // const response = await api.createCategory(categoryData);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = {
+        success: true,
+      };
       setLoading(false);
       return response.success;
     } catch (error) {

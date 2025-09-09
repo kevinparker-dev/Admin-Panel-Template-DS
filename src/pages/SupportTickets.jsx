@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Eye,
   MessageSquare,
@@ -10,6 +10,7 @@ import {
   Calendar,
   Filter,
   AlertCircle,
+  Ticket,
 } from "lucide-react";
 import DataTable from "../components/common/DataTable";
 import Button from "../components/ui/Button";
@@ -19,9 +20,9 @@ import Modal from "../components/ui/Modal";
 import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
 import FilterBar from "../components/ui/FilterBar";
-import { formatDateTime } from "../utils/helpers";
-import { TICKET_STATUS } from "../config/constants";
+import { formatDateTime, formatNumber } from "../utils/helpers";
 import TextArea from "../components/ui/TextArea";
+import StatsCard from "../components/common/StatsCard";
 
 const SupportTickets = () => {
   const [tickets, setTickets] = useState([
@@ -101,6 +102,35 @@ const SupportTickets = () => {
     priority: "",
     category: "",
   });
+
+  const supportTicketStats = useMemo(
+    () => [
+      {
+        title: "Open Tickets",
+        value: formatNumber(14),
+        icon: Ticket,
+      },
+      {
+        title: "In Progress",
+        value: formatNumber(10),
+        icon: Clock,
+      },
+      {
+        title: "Resolved",
+        value: formatNumber(4),
+        icon: CheckCircle,
+      },
+
+      {
+        title: "High Priority",
+        value: formatNumber(3),
+        icon: AlertCircle,
+        color: "text-red-600",
+        bgColor: "bg-red-600/20"
+      },
+    ],
+    []
+  );
 
   const columns = [
     {
@@ -326,69 +356,18 @@ const SupportTickets = () => {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Open Tickets
-              </p>
-              <p className="text-2xl font-bold text-yellow-600">
-                {openTickets}
-              </p>
-            </div>
-            <div className="p-3 bg-yellow-100 rounded-lg">
-              <Clock className="w-6 h-6 text-yellow-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                In Progress
-              </p>
-              <p className="text-2xl font-bold text-blue-600">
-                {inProgressTickets}
-              </p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-blue-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Resolved
-              </p>
-              <p className="text-2xl font-bold text-green-600">
-                {resolvedTickets}
-              </p>
-            </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-green-600" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                High Priority
-              </p>
-              <p className="text-2xl font-bold text-red-600">
-                {highPriorityTickets}
-              </p>
-            </div>
-            <div className="p-3 bg-red-100 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-red-600" />
-            </div>
-          </div>
-        </Card>
+        {supportTicketStats?.map((stat, index) => (
+          <StatsCard
+            key={index}
+            title={stat.title}
+            value={stat.value}
+            icon={stat.icon ? <stat.icon /> : null}
+            colored
+            color={stat.color}
+            bgColor={stat.bgColor}
+            index={index}
+          />
+        ))}
       </div>
 
       {/* Filters */}

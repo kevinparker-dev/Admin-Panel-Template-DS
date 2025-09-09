@@ -217,7 +217,6 @@ const Dashboard = () => {
       change: "+15.3%",
       trend: "up",
       icon: DollarSign,
-      show: API_CONFIG.stripe.enabled,
     },
     {
       title: "Support Tickets",
@@ -226,7 +225,7 @@ const Dashboard = () => {
       trend: "down",
       icon: MessageSquare,
     },
-  ].filter((stat) => stat.show !== false);
+  ];
 
   const secondaryStats = [
     {
@@ -249,7 +248,6 @@ const Dashboard = () => {
       change: "+18.7%",
       trend: "up",
       icon: CreditCard,
-      show: API_CONFIG.stripe.enabled,
     },
     {
       title: "Total Revenue",
@@ -257,9 +255,8 @@ const Dashboard = () => {
       change: "+22.4%",
       trend: "up",
       icon: TrendingUp,
-      show: API_CONFIG.stripe.enabled,
     },
-  ].filter((stat) => stat.show !== false);
+  ];
 
   return (
     <div className="space-y-6 fade-in">
@@ -422,35 +419,33 @@ const Dashboard = () => {
       {/* Transactions and User Growth */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Transaction Trends */}
-        {API_CONFIG.stripe.enabled && (
-          <Card>
-            <Card.Header>
-              <Card.Title>Transaction Trends</Card.Title>
-            </Card.Header>
-            <Card.Content className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={revenueData}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="#374151"
-                    opacity={0.3}
-                  />
-                  <XAxis dataKey="month" stroke="#6B7280" />
-                  <YAxis stroke="#6B7280" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1F2937",
-                      border: "1px solid #374151",
-                      borderRadius: "8px",
-                      color: "#F9FAFB",
-                    }}
-                  />
-                  <Bar dataKey="transactions" fill={CHART_COLORS.secondary} />
-                </BarChart>
-              </ResponsiveContainer>
-            </Card.Content>
-          </Card>
-        )}
+        <Card>
+          <Card.Header>
+            <Card.Title>Transaction Trends</Card.Title>
+          </Card.Header>
+          <Card.Content className="chart-container">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={revenueData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#374151"
+                  opacity={0.3}
+                />
+                <XAxis dataKey="month" stroke="#6B7280" />
+                <YAxis stroke="#6B7280" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1F2937",
+                    border: "1px solid #374151",
+                    borderRadius: "8px",
+                    color: "#F9FAFB",
+                  }}
+                />
+                <Bar dataKey="transactions" fill={CHART_COLORS.secondary} />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card.Content>
+        </Card>
 
         {/* User Growth */}
         <Card>
