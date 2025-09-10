@@ -1,29 +1,25 @@
 // App Configuration Constants
 export const APP_CONFIG = {
-  name: "Skylaboo",
+  name: "Company Ipsum",
   version: "1.0.0",
-  description: "Skylaboo kids e-commerece store",
-  author: "Skylaboo",
-  logo: "/images/logo.webp",
-  supportEmail: "support@skylaboo.com",
+  description: "Company ipsum description here",
+  author: "Company Ipsum",
+  logo: "/images/logo.svg",
+  supportEmail: "support@company.com",
   companyUrl: "https://example.com",
 };
 
 // Global Color Configuration - Dynamic Theme System
 export const COLOR_CONFIG = {
-  // Primary color (required) - Main brand color
+  // Primary color - Main brand color
   primary: {
-    name: "Dark Pink",
-    hex: "#F5276C",
-    rgb: "198, 13, 249",
-    enabled: true, // Set to false to disable secondary color
+    name: "Red",
+    hex: "#F40E00",
   },
-  // Secondary color (optional) - Accent color
+  // Secondary color - Accent color
   secondary: {
-    name: "Orangish Yellow",
-    hex: "#F87C63",
-    rgb: "97, 50, 234",
-    enabled: true,
+    name: "Orange",
+    hex: "#FB7559",
   },
 };
 
@@ -32,7 +28,6 @@ export const THEME_OPTIONS = {
   enableThemeToggle: true, // Set to false to disable theme switching
   defaultTheme: "dark", // 'light' or 'dark'
   forceTheme: "", // Set to 'light' or 'dark' to force a single theme (disables toggle)
-  enableSecondaryColor: COLOR_CONFIG.secondary.enabled,
   // Theme persistence
   persistTheme: true, // Save theme preference to localStorage
   respectSystemTheme: true, // Respect system dark/light mode preference

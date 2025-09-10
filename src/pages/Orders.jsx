@@ -19,7 +19,12 @@ import Button from "../components/ui/Button";
 import Badge from "../components/ui/Badge";
 import Card from "../components/ui/Card";
 import Modal from "../components/ui/Modal";
-import { formatCurrency, formatDate, formatDateTime, formatNumber } from "../utils/helpers";
+import {
+  formatCurrency,
+  formatDate,
+  formatDateTime,
+  formatNumber,
+} from "../utils/helpers";
 import { PAGINATION_CONFIG } from "../config/constants";
 import useOrderActions from "../hooks/orders/useOrderActions";
 import useDebounce from "../hooks/global/useDebounce";
@@ -49,59 +54,62 @@ const Orders = () => {
   const [filters, setFilters] = useState(defaultFilters);
   const [apiFilters, setApiFilters] = useState(defaultFilters);
 
-  const formattedFilters = [
-    {
-      key: "paymentStatus",
-      label: "Payment Status",
-      type: "select",
-      value: filters.paymentStatus,
-      onChange: (value) => setFilters({ ...filters, paymentStatus: value }),
-      options: [
-        { value: "paid", label: "Paid" },
-        { value: "pending", label: "Pending" },
-        { value: "failed", label: "Failed" },
-      ],
-    },
-    {
-      key: "orderStatus",
-      label: "Order Status",
-      type: "select",
-      value: filters.orderStatus,
-      onChange: (value) => setFilters({ ...filters, orderStatus: value }),
-      options: [
-        { value: "delivered", label: "Delivered" },
-        { value: "shipped", label: "Shipped" },
-        { value: "processing", label: "Processing" },
-        { value: "confirmed", label: "Confirmed" },
-        { value: "cancelled", label: "Cancelled" },
-      ],
-    },
-    {
-      key: "orderType",
-      label: "Order Type",
-      type: "select",
-      value: filters.orderType,
-      onChange: (value) => setFilters({ ...filters, orderType: value }),
-      options: [
-        { value: "delivery", label: "Delivery" },
-        { value: "pickup", label: "Pickup" },
-      ],
-    },
-    {
-      key: "startDate",
-      label: "Start Date",
-      type: "date",
-      value: filters.startDate,
-      onChange: (value) => setFilters({ ...filters, startDate: value }),
-    },
-    {
-      key: "endDate",
-      label: "End Date",
-      type: "date",
-      value: filters.endDate,
-      onChange: (value) => setFilters({ ...filters, endDate: value }),
-    },
-  ];
+  const formattedFilters = useMemo(
+    () => [
+      {
+        key: "paymentStatus",
+        label: "Payment Status",
+        type: "select",
+        value: filters.paymentStatus,
+        onChange: (value) => setFilters({ ...filters, paymentStatus: value }),
+        options: [
+          { value: "paid", label: "Paid" },
+          { value: "pending", label: "Pending" },
+          { value: "failed", label: "Failed" },
+        ],
+      },
+      {
+        key: "orderStatus",
+        label: "Order Status",
+        type: "select",
+        value: filters.orderStatus,
+        onChange: (value) => setFilters({ ...filters, orderStatus: value }),
+        options: [
+          { value: "delivered", label: "Delivered" },
+          { value: "shipped", label: "Shipped" },
+          { value: "processing", label: "Processing" },
+          { value: "confirmed", label: "Confirmed" },
+          { value: "cancelled", label: "Cancelled" },
+        ],
+      },
+      {
+        key: "orderType",
+        label: "Order Type",
+        type: "select",
+        value: filters.orderType,
+        onChange: (value) => setFilters({ ...filters, orderType: value }),
+        options: [
+          { value: "delivery", label: "Delivery" },
+          { value: "pickup", label: "Pickup" },
+        ],
+      },
+      {
+        key: "startDate",
+        label: "Start Date",
+        type: "date",
+        value: filters.startDate,
+        onChange: (value) => setFilters({ ...filters, startDate: value }),
+      },
+      {
+        key: "endDate",
+        label: "End Date",
+        type: "date",
+        value: filters.endDate,
+        onChange: (value) => setFilters({ ...filters, endDate: value }),
+      },
+    ],
+    []
+  );
 
   const {
     orders,

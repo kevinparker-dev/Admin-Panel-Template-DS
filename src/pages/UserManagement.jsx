@@ -28,9 +28,6 @@ import useGetAllUsers from "../hooks/users/useGetAllUsers";
 import StatsCard from "../components/common/StatsCard";
 
 const UserManagement = () => {
-  const { totalData, totalPages, users, loading, getAllUsers } =
-    useGetAllUsers();
-
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,11 +36,65 @@ const UserManagement = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [filters, setFilters] = useState({
+
+  const defaultFilters = {
     role: "",
     status: "",
     dateRange: { start: "", end: "" },
-  });
+  };
+  const [filters, setFilters] = useState(defaultFilters);
+  const [apiFilters, setApiFilters] = useState(defaultFilters);
+
+  const filtersProp = useMemo(
+    () => [
+      {
+        key: "role",
+        label: "Role",
+        type: "select",
+        value: filters.role,
+        onChange: (value) => setFilters((prev) => ({ ...prev, role: value })),
+        options: [
+          { value: "user", label: "User" },
+          { value: "manager", label: "Manager" },
+          { value: "admin", label: "Admin" },
+        ],
+      },
+      {
+        key: "status",
+        label: "Status",
+        type: "select",
+        value: filters.status,
+        onChange: (value) => setFilters((prev) => ({ ...prev, status: value })),
+        options: [
+          { value: "active", label: "Active" },
+          { value: "inactive", label: "Inactive" },
+        ],
+      },
+      {
+        key: "startDate",
+        label: "Start Date",
+        type: "date",
+        value: filters.dateRange.start,
+        onChange: (value) =>
+          setFilters((prev) => ({
+            ...prev,
+            dateRange: { ...prev.dateRange, start: value },
+          })),
+      },
+      {
+        key: "endDate",
+        label: "End Date",
+        type: "date",
+        value: filters.dateRange.end,
+        onChange: (value) =>
+          setFilters((prev) => ({
+            ...prev,
+            dateRange: { ...prev.dateRange, end: value },
+          })),
+      },
+    ],
+    []
+  );
 
   const {
     register,
@@ -51,6 +102,17 @@ const UserManagement = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const { totalData, totalPages, users, loading, getAllUsers } = useGetAllUsers(
+    apiFilters,
+    currentPage,
+    pageSize
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setApiFilters(filters);
+  }, [filters]);
 
   const usersStats = useMemo(
     () => [
@@ -98,7 +160,7 @@ const UserManagement = () => {
 
       render: (value, user) => (
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-primary-100/30 rounded-full flex items-center justify-center">
             <span className="text-primary-600 font-medium text-sm">
               {value.charAt(0).toUpperCase()}
             </span>
@@ -290,23 +352,6 @@ const UserManagement = () => {
     setShowModal(false);
   };
 
-  // Filter users based on current filters
-  const filteredUsers = users.filter((user) => {
-    if (filters.role && user.role !== filters.role) return false;
-    if (filters.status && user.status !== filters.status) return false;
-    if (
-      filters.dateRange.start &&
-      new Date(user.createdAt) < new Date(filters.dateRange.start)
-    )
-      return false;
-    if (
-      filters.dateRange.end &&
-      new Date(user.createdAt) > new Date(filters.dateRange.end)
-    )
-      return false;
-    return true;
-  });
-
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
@@ -328,62 +373,8 @@ const UserManagement = () => {
       {/* Filters */}
       <Card className="p-4">
         <FilterBar
-          filters={[
-            {
-              key: "role",
-              label: "Role",
-              type: "select",
-              value: filters.role,
-              onChange: (value) =>
-                setFilters((prev) => ({ ...prev, role: value })),
-              options: [
-                { value: "user", label: "User" },
-                { value: "manager", label: "Manager" },
-                { value: "admin", label: "Admin" },
-              ],
-            },
-            {
-              key: "status",
-              label: "Status",
-              type: "select",
-              value: filters.status,
-              onChange: (value) =>
-                setFilters((prev) => ({ ...prev, status: value })),
-              options: [
-                { value: "active", label: "Active" },
-                { value: "inactive", label: "Inactive" },
-              ],
-            },
-            {
-              key: "startDate",
-              label: "Start Date",
-              type: "date",
-              value: filters.dateRange.start,
-              onChange: (value) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  dateRange: { ...prev.dateRange, start: value },
-                })),
-            },
-            {
-              key: "endDate",
-              label: "End Date",
-              type: "date",
-              value: filters.dateRange.end,
-              onChange: (value) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  dateRange: { ...prev.dateRange, end: value },
-                })),
-            },
-          ]}
-          onClear={() =>
-            setFilters({
-              role: "",
-              status: "",
-              dateRange: { start: "", end: "" },
-            })
-          }
+          filters={filtersProp}
+          onClear={() => setFilters(defaultFilters)}
         />
       </Card>
 

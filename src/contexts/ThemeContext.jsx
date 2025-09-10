@@ -90,11 +90,9 @@ export const ThemeProvider = ({ children }) => {
     })
     
     // Set CSS custom properties for secondary colors if enabled
-    if (THEME_OPTIONS.enableSecondaryColor) {
       Object.entries(secondaryPalette).forEach(([shade, rgb]) => {
         root.style.setProperty(`--color-secondary-${shade}`, rgb)
       })
-    }
     
     // Save theme preference if persistence is enabled
     if (THEME_OPTIONS.persistTheme && !THEME_OPTIONS.forceTheme) {
@@ -143,7 +141,6 @@ export const ThemeProvider = ({ children }) => {
     colors: {
       primary: COLOR_CONFIG.primary,
       secondary: COLOR_CONFIG.secondary,
-      hasSecondary: THEME_OPTIONS.enableSecondaryColor
     }
   }
 

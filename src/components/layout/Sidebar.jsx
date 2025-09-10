@@ -156,7 +156,7 @@ const Sidebar = () => {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-6 h-20 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div
-            className={`flex items-center ${
+            className={`w-full flex items-center ${
               sidebarCollapsed ? "justify-center w-full" : ""
             } transition-all duration-500`}
           >
@@ -164,7 +164,7 @@ const Sidebar = () => {
               <img
                 src={APP_CONFIG.logo}
                 alt={APP_CONFIG.name}
-                className="h-full max-h-10"
+                className="h-full max-h-6"
               />
             ) : (
               <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -175,23 +175,12 @@ const Sidebar = () => {
             )}
 
             {!sidebarCollapsed && (
-              <span className="ml-3 text-lg font-semibold text-gray-900 dark:text-white transition-opacity duration-300 truncate">
+              <p className="flex-1 ml-3 text-lg font-semibold text-gray-900 dark:text-white transition-opacity duration-300 truncate">
                 {APP_CONFIG.name}
-              </span>
+              </p>
             )}
           </div>
-          {/* Collapse/Expand button (desktop only) */}
-          {/* <button
-            onClick={toggleSidebar}
-            className="hidden lg:flex items-center justify-center p-1 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 ml-2"
-            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <ChevronRight
-              className={`w-5 h-5 ${
-                sidebarCollapsed ? "-rotate-180" : ""
-              } transition-all`}
-            />
-          </button> */}
+
           {/* Mobile close button */}
           <button
             onClick={toggleMobileSidebar}

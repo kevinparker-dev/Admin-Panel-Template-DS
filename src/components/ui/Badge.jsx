@@ -12,7 +12,7 @@ const Badge = ({
     success:
       "bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-400",
     warning: "bg-yellow-100 dark:bg-yellow-500/20 text-yellow-800 dark:text-yellow-400",
-    danger: "bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-400",
+    danger: "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400",
     info: "bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-400",
   };
 

@@ -23,7 +23,7 @@ import { useForm, Controller } from "react-hook-form";
 import { formatCurrency, formatDate, formatNumber } from "../utils/helpers";
 import Card from "../components/ui/Card";
 import useGetAllProducts from "../hooks/products/useGetAllProducts";
-import { API_CONFIG, PAGINATION_CONFIG } from "../config/constants";
+import { PAGINATION_CONFIG } from "../config/constants";
 import FilterBar from "../components/ui/FilterBar";
 import useDebounce from "../hooks/global/useDebounce";
 import useGetAllCategories from "../hooks/categories/useGetAllCategories";
