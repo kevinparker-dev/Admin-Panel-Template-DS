@@ -12,6 +12,16 @@ export const formatDate = (date, format = DATE_CONFIG.format) => {
   });
 };
 
+export const formatDateWithName = (date, format = DATE_CONFIG.format) => {
+  if (!date) return "";
+  const d = new Date(date);
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+};
+
 export const formatDateTime = (date) => {
   if (!date) return "";
   const d = new Date(date);
